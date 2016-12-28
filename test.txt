@@ -1,1 +1,1 @@
-xx
+$git clone git@github.com:mrspwd/helloworld.git               本地克隆项目要用这个格式才能使用ssh
