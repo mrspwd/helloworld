@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
+import os
 import math
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-for x,y,z in [(1,1,0),(2,4,2),(3,9,4)]:
-      print(x)
+a = list(map(str, [1, 2, 3, 4, 5, 6, 7, 8, 9]))
+print(a)
