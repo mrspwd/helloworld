@@ -1,0 +1,47 @@
+http://dualface.github.io/blog/2013/01/01/call-java-from-lua/#E5B08620lua20function20E4BD9CE4B8BAE58F82E695B0E4BCA0E98092E7BB9920java20E696B9E6B395
+http://www.cnblogs.com/lan0725/p/3867962.html
+http://www.cnblogs.com/jsfx/p/5508754.html
+
+-- android 服务器产生订单后 客户端开始正式购买操作
+function androidStartPay(data)
+    if isAdroid() == false then
+        print("不允许的平台支付")
+        disposeLoading()
+        payError()
+        return
+    end
+
+    local presult =  GameDataCenter:GetOrderInfo(data)
+    local javaMethodName = "startPay"
+    local javaParams = {presult.orderNo, presult.money, userID, userName, presult.payName, userToken, presult.productId, androidPayBack}
+    local javaMethodSig = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V"
+    luaj.callStaticMethod(PACKAGE_NAME, javaMethodName, javaParams, javaMethodSig)
+end
+复制代码
+java简单的回调
+
+复制代码
+private static void setLuaCallback(final int callback, final String result) {
+        BaseUtils.D(TAG, "setLuaCallback ========" + result);
+        if (callback <= 0) {
+            BaseUtils.E(TAG, " callback is null");
+            return;
+        }
+        LuaCallback = 0;
+        // 回调lua
+//        s_instance.Resume();
+//        s_instance.onWindowFocusChanged(true);
+        s_instance.runOnGLThread(new Runnable() {
+            @Override
+            public void run() {
+                Cocos2dxLuaJavaBridge.callLuaFunctionWithString(callback,
+                        result);
+                Cocos2dxLuaJavaBridge.releaseLuaFunction(callback);
+            }
+        });
+    }
+
+
+
+
+Cocos2dxLuaJavaBridge.callLuaGlobalFunctionWithString("G_CallbackFromJava", "success");// 全局lua函数调用
