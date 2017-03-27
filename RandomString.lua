@@ -44,7 +44,7 @@ RDModle.RSM_Cap_Let = x; x = x + 1 -- 大小写字母
 RDModle.RSM_Number  = x; x = x + 1 -- 纯数字
 RDModle.RSM_Cap_Num = x; x = x + 1 -- 大写字母和数字
 RDModle.RSM_Let_Num = x; x = x + 1 -- 小写字母和数字
-RDModle.RSM_All     = x; x = x + 1 -- 全部类型
+RDModle.RSM_All     = x; x = x + 1 -- 全部类型(数字+大小写字母)
 
 -- 指定长度的随机文本
 function RandomString( len, modl )
