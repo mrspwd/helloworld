@@ -1,0 +1,9 @@
+appId，partnerId，prepayId，nonceStr，timeStamp，package。注意：package的值格式为Sign=WXPay
+
+实际字段 （需要按顺序）
+appid
+noncestr
+package
+partnerid
+prepayid
+timestamp
