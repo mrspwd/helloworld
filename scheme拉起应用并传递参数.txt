@@ -1,0 +1,192 @@
+-------------------------------------------------------------------html
+<script type="text/javascript">
+    // 是否是安卓
+    function isAndroid() {
+        var u = navigator.userAgent;
+        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) { //安卓手机
+            return true;
+        }
+        return false;
+    }
+    
+    function isIOS(){
+        var u = navigator.userAgent;
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        return isiOS;
+        
+    }
+    function isRunOnWeChat(){
+        var ua = navigator.userAgent.toLowerCase();  
+        if(ua.match(/MicroMessenger/i)=="micromessenger") {  
+            return true;  
+        } else {  
+            return false;  
+        }  
+    }
+    
+    function getQueryString(name) { 
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+        var r = window.location.search.substr(1).match(reg); 
+        if (r != null) return unescape(r[2]); return null; 
+    } 
+
+    // 显示微信遮罩
+    function WeChatShow(){
+        var height = document.body.scrollHeight;
+        var width = document.body.scrollWidth;
+        var weChatMask = document.getElementById("mask");    
+        weChatMask.style.display="block";
+        weChatMask.style.position="absolute";
+        weChatMask.style.display="block";
+        weChatMask.style.zIndex = "8888";
+        weChatMask.style.width=width+"px";
+        weChatMask.style.height=height+"px";
+        weChatMask.style.background="white";
+        weChatMask.style.opacity="1";    
+        // var evt = event || window.event;
+        // var event = getMousePos(evt);
+        // var weChatPop = document.getElementById("pop-up-wechat");
+        // weChatPop.style.top= (event.y-400)+"px";
+        // weChatPop.style.left= (event.x+200)+"px";
+        // weChatPop.style.display="block";
+        // weChatPop.style.zIndex = "9999";
+        // weChatPop.style.opacity="1";
+    }
+
+    function hideWeChat(){
+        var weChatMask = document.getElementById("mask");
+        // var weChatPop = document.getElementById("pop-up-wechat");
+        weChatMask.style.display="none";
+        // weChatPop.style.display="none";
+    }
+
+
+    function updAndroidUrl(){
+        var jsonParam="{'info':'"+ getQueryString('info')+"'}";
+
+        (function(){
+            var ua = navigator.userAgent.toLowerCase();
+            var adrScheme = "填写Scheme";
+            var download_apk = "http://192.168.4/apk/xx.apk";
+            var t;
+            var config = {
+                /*scheme:必须*/
+                scheme_IOS: 'xxxxxxxx://xxxxxxxx',
+                scheme_Adr: adrScheme+'://host/path?info='+jsonParam,
+                download_url: download_apk,
+                timeout: 600
+            };
+
+            function openclient() {
+                var startTime = Date.now();
+
+                var ifr = document.createElement('iframe');
+
+
+                ifr.src = ua.indexOf('os') > 0 ? config.scheme_IOS : config.scheme_Adr;
+                ifr.style.display = 'none';
+                document.body.appendChild(ifr);
+
+                var t = setTimeout(function() {
+                    var endTime = Date.now();
+
+                    if (!startTime || endTime - startTime < config.timeout + 200) {
+                        window.location = config.download_url;
+                    } else {
+                        
+                    }
+                }, config.timeout);
+
+                window.onblur = function() {
+                    clearTimeout(t);
+                }
+            }
+            window.addEventListener("DOMContentLoaded", function(){
+                document.getElementById("downloadButton").addEventListener('click',openclient,false);
+            }, false);
+        })()
+    }
+
+
+    if(true == isIOS()){
+        // alert("ios");
+    }else if(true == isAndroid()){
+        // alert("android");
+        updAndroidUrl();
+    }else{
+        // alert("其他");
+        updAndroidUrl();
+    }
+
+    // 如果在微信中打开，直接弹遮罩
+    if(true == isRunOnWeChat()){
+        // alert("微信");
+        WeChatShow();
+    }	
+</script>
+
+
+
+---------------------------------------------------------------------------------android
+
+@Override
+    
+protected void onCreate(Bundle savedInstanceState) {
+        // 获取网页启动参数
+        
+	getSchemeOpenParam();
+}
+@Override
+    
+protected void onNewIntent(Intent intent) {
+        
+	super.onNewIntent(intent);
+        
+	setIntent(intent);
+        
+	//此处要调用，否则App在后台运行时，会无法截获
+        
+	getSchemeOpenParam();
+    
+}
+    
+    
+// 网页拉起app 获得参数
+    
+public void getSchemeOpenParam() {
+        
+	// 获取网页启动参数
+        
+	Intent i_getvalue = getIntent();
+        
+	String action = i_getvalue.getAction();
+        
+	if(Intent.ACTION_VIEW.equals(action)){
+           
+		Uri uri = i_getvalue.getData();
+           
+		if(uri != null){
+              
+			String info = uri.getQueryParameter("info");
+              
+			if(info != null){                  
+                  
+				urlOpenInstallInfo = info;
+              
+			}
+              
+			Log.e("info",info);
+           
+		}
+        
+	}
+    
+}
+
+
+
+
+
+
+
+
