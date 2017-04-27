@@ -83,30 +83,24 @@
 
             function openclientARD() {
                 var startTime = Date.now();
-
                 var ifr = document.createElement('iframe');
-
                 ifr.src = config.scheme_Adr;
-                ifr.download_url = config.download_url_Adr;
                 ifr.style.display = 'none';
-
-                var isInstalled;
-                //安卓
-                ifr.onload = function() {
-                    // 没有安装客户端
-                    isInstalled = true;
-                    // alert(isInstalled);
-                    window.location.href = ifr.download_url;
-                };
-                ifr.onerror = function() {
-                    // 安装了客户端
-                    isInstalled = false;
-                    // alert(isInstalled);
-                }
                 document.body.appendChild(ifr);
-                setTimeout(function() {
-                    document.body.removeChild(ifr);
-                },config.timeout);
+
+                var t = setTimeout(function() {
+                    var endTime = Date.now();
+
+                    if (!startTime || endTime - startTime < config.timeout + 200) {
+                        window.location = config.download_url_Adr;
+                    } else {
+                        
+                    }
+                }, config.timeout);
+
+                window.onblur = function() {
+                    clearTimeout(t);
+                }
             }
             
 
