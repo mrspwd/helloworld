@@ -1,6 +1,6 @@
 -------------------------------------------------------------------html
 <script type="text/javascript">
-    // 是否是安卓
+        // 是否是安卓
     function isAndroid() {
         var u = navigator.userAgent;
         if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) { //安卓手机
@@ -61,61 +61,89 @@
     }
 
 
-    function updAndroidUrl(){
+    function updUrl(){
         var jsonParam="{'info':'"+ getQueryString('info')+"'}";
 
         (function(){
             var ua = navigator.userAgent.toLowerCase();
-            var adrScheme = "填写Scheme";
-            var download_apk = "http://192.168.4/apk/xx.apk";
+            var iosScheme = "jijihuilimj";
+            var adrScheme = "lwjxzdd";
+            // var adrScheme = "jjhlmj";
+            var download_apk = "http://xydown.pstarwar.com:8096/android/xyxzdd.apk"; // 安卓下载地址
+            var download_ios = "http://xydown.pstarwar.com:8096/android/xyxzdd.apk"; // ios下载地址
             var t;
             var config = {
                 /*scheme:必须*/
-                scheme_IOS: 'xxxxxxxx://xxxxxxxx',
+                scheme_IOS: iosScheme+'://?info='+jsonParam,
                 scheme_Adr: adrScheme+'://host/path?info='+jsonParam,
-                download_url: download_apk,
+                download_url_IOS: download_ios,
+                download_url_Adr: download_apk,
                 timeout: 600
             };
 
-            function openclient() {
+            function openclientARD() {
                 var startTime = Date.now();
 
                 var ifr = document.createElement('iframe');
 
-
-                ifr.src = ua.indexOf('os') > 0 ? config.scheme_IOS : config.scheme_Adr;
+                ifr.src = config.scheme_Adr;
+                ifr.download_url = config.download_url_Adr;
                 ifr.style.display = 'none';
-                document.body.appendChild(ifr);
 
-                var t = setTimeout(function() {
-                    var endTime = Date.now();
-
-                    if (!startTime || endTime - startTime < config.timeout + 200) {
-                        window.location = config.download_url;
-                    } else {
-                        
-                    }
-                }, config.timeout);
-
-                window.onblur = function() {
-                    clearTimeout(t);
+                var isInstalled;
+                //安卓
+                ifr.onload = function() {
+                    // 没有安装客户端
+                    isInstalled = true;
+                    // alert(isInstalled);
+                    window.location.href = ifr.download_url;
+                };
+                ifr.onerror = function() {
+                    // 安装了客户端
+                    isInstalled = false;
+                    // alert(isInstalled);
                 }
+                document.body.appendChild(ifr);
+                setTimeout(function() {
+                    document.body.removeChild(ifr);
+                },config.timeout);
             }
+            
+
+            function openclientIOS() {
+                location.href = config.scheme_IOS;
+                setTimeout(function() {
+                    location.href = config.download_url_IOS;
+                }, 250);
+                setTimeout(function() {
+                    // location.reload();
+                }, 1000);
+            }
+
+
             window.addEventListener("DOMContentLoaded", function(){
-                document.getElementById("downloadButton").addEventListener('click',openclient,false);
+                if(true == isIOS()){
+                    document.getElementById("downloadButton").addEventListener('click',openclientIOS,false);
+                }else if(true == isAndroid()){
+                    document.getElementById("downloadButton").addEventListener('click',openclientARD,false);
+                }else{
+                    document.getElementById("downloadButton").addEventListener('click',openclientOTHER,false);
+                }
             }, false);
         })()
     }
+
+    updUrl();
+
+           
 
 
     if(true == isIOS()){
         // alert("ios");
     }else if(true == isAndroid()){
         // alert("android");
-        updAndroidUrl();
     }else{
         // alert("其他");
-        updAndroidUrl();
     }
 
     // 如果在微信中打开，直接弹遮罩
