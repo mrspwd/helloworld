@@ -1,0 +1,1 @@
+UpdateChecker.checkForDialog(AppActivity.this);
