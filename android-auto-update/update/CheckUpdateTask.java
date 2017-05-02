@@ -73,9 +73,9 @@ class CheckUpdateTask extends AsyncTask<Void, Void, String> {
 
             if (apkCode > versionCode) {
                 if (mType == Constants.TYPE_NOTIFICATION) {
-                    showNotification(mContext, updateMessage, apkUrl, (apkCode <= isMaskShowVersionCode));
+                    showNotification(mContext, updateMessage, apkUrl, (versionCode <= isMaskShowVersionCode));
                 } else if (mType == Constants.TYPE_DIALOG) {
-                    showDialog(mContext, updateMessage, apkUrl, (apkCode <= isMaskShowVersionCode));
+                    showDialog(mContext, updateMessage, apkUrl, (versionCode <= isMaskShowVersionCode));
                 }
             } else if (mShowProgressDialog) {
                 // Toast.makeText(mContext, mContext.getString(R.string.android_auto_update_toast_no_new_update), Toast.LENGTH_SHORT).show();
