@@ -7,7 +7,7 @@ class Constants {
 
     static final String APK_DOWNLOAD_URL = "url"; //apk下载地址
     static final String APK_UPDATE_CONTENT = "updateMessage"; // 更新信息
-    static final String APK_ISMASKSHOW = "isMaskShow"; // 是否强制更新
+    static final String APK_ISMASKSHOW_VERSION_CODE = "isMaskShowVersionCode"; // 是否强制更新版本号(此版本一下强制更新)
     static final String APK_VERSION_CODE = "versionCode"; // 版本号
 
 
@@ -17,5 +17,5 @@ class Constants {
 
     static final String TAG = "UpdateChecker";
 
-    static final String UPDATE_URL = "http://192.168.199.119/update.json";
+    static final String UPDATE_URL = "https://mrspwd.github.io/android_update_test/update.json";
 }

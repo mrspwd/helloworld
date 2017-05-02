@@ -65,16 +65,17 @@ class CheckUpdateTask extends AsyncTask<Void, Void, String> {
             JSONObject obj = new JSONObject(result);
             String updateMessage = obj.getString(Constants.APK_UPDATE_CONTENT);
             String apkUrl = obj.getString(Constants.APK_DOWNLOAD_URL);
-            boolean isMaskShow = obj.getBoolean(Constants.APK_ISMASKSHOW);
+            // boolean isMaskShow = obj.getBoolean(Constants.APK_ISMASKSHOW);
+            int isMaskShowVersionCode = obj.getInt(Constants.APK_ISMASKSHOW_VERSION_CODE);
             int apkCode = obj.getInt(Constants.APK_VERSION_CODE);
 
             int versionCode = AppUtils.getVersionCode(mContext);
 
             if (apkCode > versionCode) {
                 if (mType == Constants.TYPE_NOTIFICATION) {
-                    showNotification(mContext, updateMessage, apkUrl, isMaskShow);
+                    showNotification(mContext, updateMessage, apkUrl, (apkCode <= isMaskShowVersionCode));
                 } else if (mType == Constants.TYPE_DIALOG) {
-                    showDialog(mContext, updateMessage, apkUrl, isMaskShow);
+                    showDialog(mContext, updateMessage, apkUrl, (apkCode <= isMaskShowVersionCode));
                 }
             } else if (mShowProgressDialog) {
                 // Toast.makeText(mContext, mContext.getString(R.string.android_auto_update_toast_no_new_update), Toast.LENGTH_SHORT).show();
